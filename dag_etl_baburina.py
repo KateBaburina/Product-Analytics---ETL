@@ -9,12 +9,12 @@ from airflow.operators.python import get_current_context
 
 
 # CH function
-def ch_get_df(query='Select 1', host='https://clickhouse.lab.karpov.courses', user='student', password='dpo_python_2020'):
+def ch_get_df(query='Select 1', host=HOST, user='student', password='dpo_python_2020'):
     r = requests.post(host, data=query.encode("utf-8"), auth=(user, password), verify=False)
     result = pd.read_csv(StringIO(r.text), sep='\t')
     return result
 
-connection_test = {'host': 'https://clickhouse.lab.karpov.courses',
+connection_test = {'host': HOST,
                       'database':'test',
                       'user':'student-rw', 
                       'password':'656e2b0c9c'
