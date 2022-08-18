@@ -8,7 +8,7 @@ from airflow.decorators import dag, task
 from airflow.operators.python import get_current_context
 
 
-# Функция для CH
+# CH function
 def ch_get_df(query='Select 1', host='https://clickhouse.lab.karpov.courses', user='student', password='dpo_python_2020'):
     r = requests.post(host, data=query.encode("utf-8"), auth=(user, password), verify=False)
     result = pd.read_csv(StringIO(r.text), sep='\t')
@@ -20,7 +20,7 @@ connection_test = {'host': 'https://clickhouse.lab.karpov.courses',
                       'password':'656e2b0c9c'
                      }
 
-# Дефолтные параметры, которые прокидываются в таски
+# Default parameteres that will be used in tasks
 default_args = {
     'owner': 'e-baburina-9',
     'depends_on_past': False,
@@ -29,7 +29,7 @@ default_args = {
     'start_date': datetime(2022, 8, 5),
 }
 
-# Интервал запуска DAG
+# DAG schedule interval - cron - 11 am every day
 schedule_interval = '0 10 * * *'
 
 @dag(default_args=default_args, schedule_interval=schedule_interval, catchup=False)
