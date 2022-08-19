@@ -16,8 +16,8 @@ def ch_get_df(query='Select 1', host=HOST, user='student', password='dpo_python_
 
 connection_test = {'host': HOST,
                       'database':'test',
-                      'user':'student-rw', 
-                      'password':'656e2b0c9c'
+                      'user':USER, 
+                      'password':PWD_TEST
                      }
 
 # Default parameteres that will be used in tasks
@@ -44,7 +44,7 @@ def dag_etl_baburina():
                countIf(user_id, action = 'view') AS views,
                countIf(user_id, action = 'like') AS likes
             FROM 
-                simulator_20220720.feed_actions 
+                DB.feed_actions 
             where 
                 toDate(time) = yesterday()
             group by
@@ -63,7 +63,7 @@ def dag_etl_baburina():
                           SELECT toDate(time) as event_date, user_id, gender, age, os,
                                 count(distinct reciever_id) as users_sent, count(*) as messages_sent
                                 FROM 
-                            simulator_20220720.message_actions
+                            DB.message_actions
                             WHERE 
                             toDate(time) = yesterday()
                             GROUP BY
@@ -71,7 +71,7 @@ def dag_etl_baburina():
                             JOIN 
                             (SELECT  toDate(time) as event_date, reciever_id as user_id, gender, os,
                                 count(distinct(user_id)) as users_received, count(*) as messages_received
-                                FROM simulator_20220720.message_actions
+                                FROM DB.message_actions
                                 WHERE toDate(time) = yesterday()
                                 GROUP BY event_date, user_id, gender, age, os) t2
                                 ON t1.user_id = t2.user_id
